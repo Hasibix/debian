@@ -20,7 +20,7 @@ mkdir -p /installer
 mkdir -p /config
 curl -L "$url/config/pipewire.conf" -o /config/pipewire.conf --progress-bar
 curl -L "$url/installer/disk.sh" -o /installer/disk.sh --progress-bar
-curl -L "$url/installer/installer.sh" -o /installer/installer.sh --progress-bar
+curl -L "$url/installer/install.sh" -o /installer/install.sh --progress-bar
 curl -L "$url/installer/setup.sh" -o /installer/setup.sh --progress-bar
 
 # run setup
