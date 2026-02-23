@@ -68,6 +68,7 @@ else
 	swap="${disk}2"
 	data="${disk}3"
 fi
+prompt_partitions
 prompt_swap_size
 
 # partitioning using parted (non-interactive)
