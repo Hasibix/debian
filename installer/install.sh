@@ -168,7 +168,7 @@ user_cargo() {
 
 # --- main ---
 apt update -y
-apt install -y e2fs-progs btrfs‑progs linux-image-amd64
+apt install -y e2fsprogs btrfs-progs linux-image-amd64
 
 # locales
 apt -y install nano locales
