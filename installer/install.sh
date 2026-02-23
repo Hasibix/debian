@@ -208,9 +208,10 @@ usermod -aG video "$username"
 groupadd -f audio
 usermod -aG audio "$username"
 
-# cli tools
+# cli and system tools 
 echo "installing cli tools"
-apt install -y wget xz-utils unzip 7zip sudo util-linux openssh-server neovim curl zsh fish
+apt install -y wget xz-utils unzip 7zip sudo util-linux openssh-server neovim curl zsh fish network-manager
+systemctl enable NetworkManager
 
 # shell
 prompt_shell
@@ -239,19 +240,23 @@ EOF
 	feh picom polybar rofi \
 	xfce4-power-manager \
 	xfce4-clipman redshift thunar alacritty \
-	thunar-archive-plugin thunar-media-tags-plugin thunar-volman
+	thunar-archive-plugin thunar-media-tags-plugin thunar-volman \
+	pavucontrol
+	# TODO: add more programs that i use
 
 	# pipewire
 	apt install -y pipewire-audio wireplumber
 	mkdir -p /home/$username/.config/pipewire
 	cp -r /pipewire.conf /home/$username/.config/pipewire/pipewire.conf
 	su - "$username" -c "systemctl --user enable pipewire pipewire-pulse wireplumber"
-	apt install -y pavucontrol
-	systemctl enable NetworkManager
 fi
+
+# dotfiles
+# TODO: download my dotfiles
 
 # gaming tools
 user_cargo "$username" install ran-launcher
+# TODO: install wine-staging, umu-launcher and legendary
 
 # finish
 echo "finished installing debian!"
