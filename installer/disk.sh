@@ -18,7 +18,6 @@ prompt_disk() {
 	while true; do
 		clear
 		lsblk
-		echo
 		read -p "select a disk to use (WARNING: this will ERASE all data on it): " disk
 		if [ ! -b "$disk" ]; then
 			echo "invalid disk device!"
