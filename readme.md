@@ -4,7 +4,7 @@ My scripts for installing debian with my configs/dotfiles and programs.
 ## Usage
 Simply run:
 ```bash
-su - root -c "apt install -y curl; curl -L https://github.com/Hasibix/debian/raw/refs/heads/main/debian.sh --progress-bar | bash"
+su - root -c "apt install -y curl; curl -L https://github.com/Hasibix/debian/raw/refs/heads/main/debian.sh --progress-bar -o /debian.sh; bash /debian.sh"
 ```
 from a Debian live environment.
 
