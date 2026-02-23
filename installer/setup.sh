@@ -80,7 +80,7 @@ apt update -y
 apt install -y debootstrap arch-install-scripts dosfstools e2fsprogs btrfs-progs nano parted
 
 # partition disk
-bash /installer/disk.sh
+source /installer/disk.sh
 
 if [ -z "$boot" ] || [ -z "$swap" ] || [ -z "$data" ]; then
 	echo "something went wrong with partitioning disks. please try again."

@@ -67,6 +67,7 @@ else
 	swap="${disk}2"
 	data="${disk}3"
 fi
+prompt_partitions
 prompt_swap_size
 
 # partitioning using parted (non-interactive)
@@ -87,7 +88,6 @@ parted -s "$disk" mkpart primary "$fs" "$swap_end" 100%
 
 clear
 lsblk
-prompt_partitions
 
 # format partitions
 mkfs.fat -F32 "$boot"
