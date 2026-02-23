@@ -8,7 +8,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # now check if it was invoked via sudo
-if [ -n "$SUDO_USER" ]; then
+if [ -n "${SUDO_USER:-}" ]; then
 	echo "do not run this script with sudo; switch to root instead"
 	exit 1
 fi
