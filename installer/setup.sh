@@ -77,7 +77,7 @@ prompt_debootstrap_stability() {
 # --- main ---
 # install deps
 apt update -y
-apt install -y debootstrap arch-install-scripts dosfstools e2fsprogs btrfs-progs nano parted
+apt install -y debootstrap util-linux arch-install-scripts dosfstools e2fsprogs btrfs-progs nano parted
 
 # partition disk
 source /installer/disk.sh
