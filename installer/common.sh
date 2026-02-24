@@ -1,3 +1,13 @@
+#!/bin/bash
+
+set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
+
+if [ "$(id -u)" -ne 0 ]; then
+	echo "this script must be run as root"
+	exit 1
+fi
+
 # --- functions ---
 as_user() {
 	local username=$1
@@ -6,11 +16,11 @@ as_user() {
 }
 
 install() {
-	apt install -y "$@" >/dev/null
+	apt install -y "$@" >/dev/null 2>&1
 }
 
 update() {
-	apt update -y >/dev/null
+	apt update -y >/dev/null 2>&1
 }
 
 set_password() {

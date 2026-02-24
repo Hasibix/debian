@@ -1,12 +1,7 @@
 #!/bin/bash
 
-set -euo pipefail
-export DEBIAN_FRONTEND=noninteractive
-
-if [ "$(id -u)" -ne 0 ]; then
-	echo "this script must be run as root"
-	exit 1
-fi
+SCRIPT_DIR="$( dirname "$0" )"
+source $SCRIPT_DIR/common.sh
 
 # --- imports ---
 SCRIPT_DIR="$( dirname "$0" )"
@@ -161,7 +156,7 @@ install git build-essential
 
 # rust toolchain
 echo "install rust for $username"
-as_user "$username" curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+as_user "$username" bash -lc "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path --profile default"
 echo ". \"/home/$username/.cargo/env\"" >> /home/$username/.profile
 
 # python + pip

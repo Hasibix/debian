@@ -1,14 +1,5 @@
 #!/bin/bash
 
-set -euo pipefail
-export DEBIAN_FRONTEND=noninteractive
-
-if [ "$(id -u)" -ne 0 ]; then
-	echo "this script must be run as root"
-	exit 1
-fi
-
-# --- imports ---
 SCRIPT_DIR="$( dirname "$0" )"
 source $SCRIPT_DIR/common.sh
 
@@ -89,7 +80,7 @@ set_password "$username"
 dpkg --add-architecture i386
 
 # install programs
-bash /programs.sh "$username"
+bash $SCRIPT_DIR/programs.sh "$username"
 
 # finish
 echo "finished installing debian!"

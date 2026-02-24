@@ -32,9 +32,8 @@ if ! command -v curl &> /dev/null; then
     install curl
 fi
 
-mkdir -p /installer
-mkdir -p /config
-curl -L "$url/config/pipewire.conf" -o /config/pipewire.conf --progress-bar
+mkdir -p /installer/config
+curl -L "$url/installer/config/pipewire.conf" -o /config/pipewire.conf --progress-bar
 curl -L "$url/installer/common.sh" -o /installer/common.sh --progress-bar
 curl -L "$url/installer/disk.sh" -o /installer/disk.sh --progress-bar
 curl -L "$url/installer/install.sh" -o /installer/install.sh --progress-bar
