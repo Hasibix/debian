@@ -8,6 +8,10 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+# --- imports ---
+SCRIPT_DIR="$( dirname "$0" )"
+source $SCRIPT_DIR/common.sh
+
 # check if system is uefi
 if [ ! -d /sys/firmware/efi ]; then
 	echo "error: system is not booted in uefi mode."
@@ -69,14 +73,6 @@ prompt_debootstrap_stability() {
 	esac
 }
 
-install() {
-	apt install -y -qq "$@"
-}
-
-update() {
-	apt update -y -qq
-}
-
 # --- main ---
 # install deps
 update
@@ -113,6 +109,7 @@ echo "generating fstab for /mnt"
 genfstab -U /mnt | tee /mnt/etc/fstab
 
 # chroot
+cp /installer/common.sh /mnt/common.sh
 cp /installer/install.sh /mnt/install.sh
 cp /installer/programs.sh /mnt/programs.sh
 chmod +x /mnt/*.sh
@@ -127,6 +124,7 @@ echo "exitted out of chroot."
 
 # cleanup
 rm /mnt/pipewire.conf
+rm /mnt/common.sh
 rm /mnt/install.sh
 rm /mnt/programs.sh
 

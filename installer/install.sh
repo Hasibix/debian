@@ -8,6 +8,10 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+# --- imports ---
+SCRIPT_DIR="$( dirname "$0" )"
+source $SCRIPT_DIR/common.sh
+
 # --- functions ---
 prompt_timezone() {
 	while true; do
@@ -17,7 +21,6 @@ prompt_timezone() {
 			! -path '*/right/*' \
 			| sed 's|/usr/share/zoneinfo/||' \
 			| sort \
-			| column \
 			| less
 
 		read -p "select your timezone: " zone
@@ -38,52 +41,14 @@ prompt_timezone() {
 
 		# valid, link it
 		ln -sf "/usr/share/zoneinfo/$zone" /etc/localtime
-		hwclock --systohc
 		echo "timezone set to $zone"
 		break
 	done
 }
 
-set_password() {
-	local user="$1"
-
-	if [ -z "$user" ]; then
-		echo "no username provided"
-		return 1
-	fi
-
-	while true; do
-		read -s -p "enter new password for $user: " pass
-		echo
-		read -s -p "confirm password for $user: " pass2
-		echo
-
-		if [ "$pass" != "$pass2" ]; then
-			echo "passwords do not match, try again"
-			continue
-		fi
-
-		if echo "$user:$pass" | chpasswd; then
-			echo "password updated successfully for $user"
-			unset pass pass2
-			break
-		else
-			echo "failed to set password for $user, try again"
-		fi
-	done
-}
-
-install() {
-	apt install -y -qq "$@"
-}
-
-update() {
-	apt update -y -qq
-}
-
 # --- main ---
 update
-install e2fsprogs btrfs-progs column linux-image-amd64
+install e2fsprogs btrfs-progs util-linux linux-image-amd64
 
 # locales
 install nano locales

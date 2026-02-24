@@ -8,6 +8,10 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+# --- imports ---
+SCRIPT_DIR="$( dirname "$0" )"
+source $SCRIPT_DIR/common.sh
+
 # --- functions ---
 prompt_shell() {
 	while true; do
@@ -137,27 +141,19 @@ prompt_gaming() {
 user_cargo() {
 	local username="$1"
 	shift
-	as_user "$username" bash -lc '
-		. "$HOME/.cargo/env"
-		cargo '"$*"
-}
-
-as_user() {
-	local username=$1
-	shift
-	sudo -u "$username" "$@"
-}
-
-install() {
-	apt install -y -qq "$@"
-}
-
-update() {
-	apt update -y -qq
+	as_user "$username" . "\$HOME/.cargo/env"\; cargo "$*"
 }
 
 # --- main ---
 username=$1
+
+# --- cli / system tools ---
+echo "installing cli tools"
+install wget curl jq \
+    xz-utils unzip p7zip-full \
+    sudo openssh-server \
+    neovim network-manager
+systemctl enable NetworkManager
 
 # --- dev / build tools ---
 echo "installing development and build tools"
@@ -177,15 +173,8 @@ echo "installing flatpak and adding flathub"
 install flatpak
 flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
-# cli / system tools
-echo "installing cli and system tools"
-install wget curl jq \
-    xz-utils unzip p7zip-full \
-    sudo util-linux openssh-server \
-    neovim network-manager
-
-systemctl enable NetworkManager
-
+# rust programs
+echo "installing rust tools"
 user_cargo "$username" install cargo-binstall
 user_cargo "$username" binstall macchina
 user_cargo "$username" install ran-launcher
