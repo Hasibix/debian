@@ -1,15 +1,10 @@
 #!/bin/bash
 
 set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
 
 if [ "$(id -u)" -ne 0 ]; then
 	echo "this script must be run as root"
-	exit 1
-fi
-
-# now check if it was invoked via sudo
-if [ -n "${SUDO_USER:-}" ]; then
-	echo "do not run this script with sudo; switch to root instead"
 	exit 1
 fi
 

@@ -7,13 +7,29 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+# check if system is uefi
+if [ ! -d /sys/firmware/efi ]; then
+	echo "error: system is not booted in uefi mode."
+	echo "this installer only supports uefi systems."
+	exit 1
+fi
+
+# --- functions ---
+install() {
+	apt install -y -qq "$@"
+}
+
+update() {
+	apt update -y -qq
+}
+
 # --- main ---
 url="https://github.com/Hasibix/debian/raw/refs/heads/main"
 
 if ! command -v curl &> /dev/null; then
     echo "curl not found, installing..."
-    apt update -y
-    apt install -y curl
+    update
+    install curl
 fi
 
 mkdir -p /installer
@@ -21,8 +37,10 @@ mkdir -p /config
 curl -L "$url/config/pipewire.conf" -o /config/pipewire.conf --progress-bar
 curl -L "$url/installer/disk.sh" -o /installer/disk.sh --progress-bar
 curl -L "$url/installer/install.sh" -o /installer/install.sh --progress-bar
+curl -L "$url/installer/programs.sh" -o /installer/programs.sh --progress-bar
 curl -L "$url/installer/setup.sh" -o /installer/setup.sh --progress-bar
 
 # run setup
+clear
 cd /installer
 exec bash /installer/setup.sh

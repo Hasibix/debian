@@ -1,15 +1,10 @@
 #!/bin/bash
 
 set -euo pipefail
+export DEBIAN_FRONTEND=noninteractive
 
 if [ "$(id -u)" -ne 0 ]; then
 	echo "this script must be run as root"
-	exit 1
-fi
-
-# now check if it was invoked via sudo
-if [ -n "${SUDO_USER:-}" ]; then
-	echo "do not run this script with sudo; switch to root instead"
 	exit 1
 fi
 
@@ -74,10 +69,18 @@ prompt_debootstrap_stability() {
 	esac
 }
 
+install() {
+	apt install -y -qq "$@"
+}
+
+update() {
+	apt update -y -qq
+}
+
 # --- main ---
 # install deps
-apt update -y
-apt install -y debootstrap util-linux arch-install-scripts dosfstools e2fsprogs btrfs-progs nano parted
+update
+install debootstrap util-linux arch-install-scripts dosfstools e2fsprogs btrfs-progs nano parted
 
 # partition disk
 source /installer/disk.sh
@@ -111,7 +114,8 @@ genfstab -U /mnt | tee /mnt/etc/fstab
 
 # chroot
 cp /installer/install.sh /mnt/install.sh
-chmod +x /mnt/install.sh
+cp /installer/programs.sh /mnt/programs.sh
+chmod +x /mnt/*.sh
 cp /config/pipewire.conf /mnt/pipewire.conf
 
 echo "chrooting to /mnt"
@@ -124,19 +128,20 @@ echo "exitted out of chroot."
 # cleanup
 rm /mnt/pipewire.conf
 rm /mnt/install.sh
+rm /mnt/programs.sh
 
 if [ -z "${swap:-}" ]; then
 	while true; do
 		clear
 		lsblk
 		read -p "which one is your swap partition? " swap
-		
+
 		if [ -z "$swap" ]; then
 			echo "swap partition cannot be empty. please try again."
 			read -n1 -r -p "press any key to continue..."
 			continue
 		fi
-	
+
 		break
 	done
 fi
