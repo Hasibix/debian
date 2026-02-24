@@ -85,5 +85,6 @@ bash $SCRIPT_DIR/programs.sh "$username"
 # finish
 echo "finished installing debian!"
 echo "now exit out of chroot to let setup.sh continue"
+echo "incase setup.sh doesn't continue, run 'bash /cleanup.sh'"
 read -n1 -r -p "press any key to continue..."
 exit 0
